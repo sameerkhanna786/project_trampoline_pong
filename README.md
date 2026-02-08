@@ -237,6 +237,7 @@ python pong.py --mode benchmark --matches 30 --pass-win-rate 0.60 --seed 2026
 ## 8. Full Git Workflow (Clone to PR)
 
 Use this for each assignment.
+Direct pushes to `main` should be blocked for students.
 
 ### 8.1 Get latest `main`
 
@@ -300,7 +301,35 @@ git commit -m "Address PR feedback"
 git push
 ```
 
-## 9. Daily Update Workflow
+## 9. Main Branch Protection (Owner Setup)
+
+Configure this once in GitHub to enforce the merge policy.
+
+Repository:
+- [https://github.com/sameerkhanna786/project_trampoline_pong](https://github.com/sameerkhanna786/project_trampoline_pong)
+
+Target policy:
+- Only `@sameerkhanna786` can merge to `main` without blockers.
+- Everyone else must use a pull request workflow.
+
+GitHub UI steps:
+1. Open repository `Settings`.
+2. Open `Branches`.
+3. Under branch protection rules, add a rule for branch name pattern `main`.
+4. Enable `Require a pull request before merging`.
+5. Set required approvals to at least `1`.
+6. Enable `Require review from Code Owners`.
+7. Enable `Require conversation resolution before merging`.
+8. In push restrictions (if available), enable `Restrict who can push to matching branches` and allow only `@sameerkhanna786`.
+9. In bypass settings (if available), allow only `@sameerkhanna786` to bypass pull request requirements.
+10. Keep force pushes and deletions disabled for `main`.
+11. Save changes.
+
+Why this works:
+- This repo includes `.github/CODEOWNERS` assigning all files to `@sameerkhanna786`.
+- With branch protection + code owner review required, collaborators must open PRs and wait for your review before merge.
+
+## 10. Daily Update Workflow
 
 Before new work each day:
 
@@ -316,7 +345,7 @@ If merge conflicts happen:
 - run tests/game again
 - commit merge result
 
-## 10. Conda Cheat Sheet
+## 11. Conda Cheat Sheet
 
 What conda is:
 - Conda is a package manager and environment manager for Python and other tools.
@@ -361,7 +390,7 @@ Remove environment completely:
 conda env remove -n pong-classroom
 ```
 
-## 11. Troubleshooting
+## 12. Troubleshooting
 
 ### `ModuleNotFoundError: No module named 'pygame'`
 
@@ -403,7 +432,7 @@ python pong.py --mode human-vs-student
 python pong.py --mode ai-vs-ai --left-ai reference --right-ai student
 ```
 
-## 12. Submission Checklist
+## 13. Submission Checklist
 
 Before submitting PR, confirm:
 - branch created from latest `main`
