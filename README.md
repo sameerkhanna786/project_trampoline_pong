@@ -22,6 +22,8 @@ Students should:
 - `ai_opponents.py`: AI classes (`StudentAI`, `ReferenceAI`, etc.).
 - `AI_GUIDE.md`: strategy and AI development guide.
 - `environment.yml`: pinned conda environment for consistent setup.
+- `.github/CODEOWNERS`: code-owner assignment for protected branch reviews.
+- `scripts/enforce_main_branch_policy.sh`: applies the `main` branch protection policy via `gh`.
 
 ## 3. Tooling Prerequisites
 
@@ -284,14 +286,24 @@ git commit -m "Document StudentAI strategy and benchmark results"
 git push -u origin feature/<your-ai-name>
 ```
 
-### 8.6 Open pull request
+### 8.6 Open your pull request (student steps)
 
-- Open the repository page in browser.
-- Create PR from your branch into `main`.
-- Include:
-  - short summary of AI strategy
-  - benchmark result
-  - what you tested
+1. Go to the repository page:
+   - [https://github.com/sameerkhanna786/project_trampoline_pong](https://github.com/sameerkhanna786/project_trampoline_pong)
+2. Click `Compare & pull request` for your branch.
+   - If you do not see that button: click `Pull requests` -> `New pull request`.
+3. Set branch direction:
+   - `base`: `main`
+   - `compare`: `feature/<your-ai-name>`
+4. Fill in PR title and description.
+   - Title example: `Improve StudentAI with predictive movement`
+   - Description must include:
+     - what strategy you changed
+     - your benchmark result (wins/losses/win rate)
+     - what you tested locally
+5. Click `Create pull request`.
+6. Wait for review feedback from `@sameerkhanna786`.
+   - Do not merge your own PR.
 
 ### 8.7 Continue after review feedback
 
@@ -301,33 +313,45 @@ git commit -m "Address PR feedback"
 git push
 ```
 
+- The same PR updates automatically after `git push`.
+- Reply to comments in the PR and mark conversations resolved when fixed.
+
 ## 9. Main Branch Protection (Owner Setup)
 
-Configure this once in GitHub to enforce the merge policy.
+Use this repo's scripted policy so the rule is reproducible and auditable.
 
 Repository:
 - [https://github.com/sameerkhanna786/project_trampoline_pong](https://github.com/sameerkhanna786/project_trampoline_pong)
 
-Target policy:
-- Only `@sameerkhanna786` can merge to `main` without blockers.
-- Everyone else must use a pull request workflow.
+Policy files in this repo:
+- `.github/CODEOWNERS`
+- `.github/main-branch-protection.json`
+- `scripts/enforce_main_branch_policy.sh`
 
-GitHub UI steps:
-1. Open repository `Settings`.
-2. Open `Branches`.
-3. Under branch protection rules, add a rule for branch name pattern `main`.
-4. Enable `Require a pull request before merging`.
-5. Set required approvals to at least `1`.
-6. Enable `Require review from Code Owners`.
-7. Enable `Require conversation resolution before merging`.
-8. In push restrictions (if available), enable `Restrict who can push to matching branches` and allow only `@sameerkhanna786`.
-9. In bypass settings (if available), allow only `@sameerkhanna786` to bypass pull request requirements.
-10. Keep force pushes and deletions disabled for `main`.
-11. Save changes.
+Expected behavior after policy is applied:
+- Only `@sameerkhanna786` (repo admin/owner) can bypass PR requirements on `main`.
+- Everyone else must open a pull request to merge into `main`.
+- PRs to `main` require at least `1` approval, code owner review, and resolved conversations.
+- Force pushes and branch deletions on `main` stay disabled.
+- Note: in personal repositories, classic branch protection does not support per-user push restrictions or explicit per-user bypass lists.
 
-Why this works:
-- This repo includes `.github/CODEOWNERS` assigning all files to `@sameerkhanna786`.
-- With branch protection + code owner review required, collaborators must open PRs and wait for your review before merge.
+Apply once (or anytime you want to re-apply):
+
+```bash
+gh auth login -h github.com
+./scripts/enforce_main_branch_policy.sh sameerkhanna786 project_trampoline_pong main
+```
+
+Manual fallback in GitHub UI (same policy):
+1. Open repository `Settings` -> `Branches`.
+2. Create/edit a branch protection rule for `main`.
+3. Enable `Require a pull request before merging`.
+4. Set required approvals to `1`.
+5. Enable `Require review from Code Owners`.
+6. Enable `Require conversation resolution before merging`.
+7. Do not enforce this rule on admins (owner remains the only admin in this repo).
+8. Keep force pushes and deletions disabled.
+9. Save the rule.
 
 ## 10. Daily Update Workflow
 
