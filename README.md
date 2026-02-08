@@ -98,13 +98,13 @@ Use this sequence exactly after prerequisites are installed.
 ### 4.1 Clone the repository
 
 ```bash
-git clone <REPO_URL>
-cd <REPO_FOLDER>
+git clone https://github.com/sameerkhanna786/project_trampoline_pong.git
+cd project_trampoline_pong
 ```
 
 Replace:
-- `<REPO_URL>` with your Git URL (for example from GitHub).
-- `<REPO_FOLDER>` with the created local folder name.
+- If you fork this repository, replace the URL with your own fork URL.
+- `project_trampoline_pong` is the default local folder name after clone.
 
 ### 4.2 Create the project environment
 
@@ -139,8 +139,8 @@ py -3 pong.py --mode pvp
 Windows (PowerShell or Miniforge Prompt):
 
 ```powershell
-git clone <REPO_URL>
-cd <REPO_FOLDER>
+git clone https://github.com/sameerkhanna786/project_trampoline_pong.git
+cd project_trampoline_pong
 conda env create -f environment.yml
 conda activate pong-classroom
 python pong.py --mode pvp
@@ -149,8 +149,8 @@ python pong.py --mode pvp
 macOS (Terminal):
 
 ```bash
-git clone <REPO_URL>
-cd <REPO_FOLDER>
+git clone https://github.com/sameerkhanna786/project_trampoline_pong.git
+cd project_trampoline_pong
 conda env create -f environment.yml
 conda activate pong-classroom
 python pong.py --mode pvp
@@ -159,8 +159,8 @@ python pong.py --mode pvp
 Ubuntu (Terminal):
 
 ```bash
-git clone <REPO_URL>
-cd <REPO_FOLDER>
+git clone https://github.com/sameerkhanna786/project_trampoline_pong.git
+cd project_trampoline_pong
 conda env create -f environment.yml
 conda activate pong-classroom
 python pong.py --mode pvp
@@ -318,13 +318,26 @@ If merge conflicts happen:
 
 ## 10. Conda Cheat Sheet
 
-Create environment:
+What conda is:
+- Conda is a package manager and environment manager for Python and other tools.
+- It lets you create isolated environments, so each project can have its own package versions.
+
+Why conda is useful for this class:
+- Everyone installs from the same `environment.yml`, reducing "works on my machine" issues.
+- It prevents one project’s dependencies from breaking another project.
+- You can easily reset or recreate the project environment if something goes wrong.
+
+Key idea:
+- The first time you set up this repo, create the environment.
+- Every time you open a new terminal to work, activate that environment.
+
+Create environment (first-time setup):
 
 ```bash
 conda env create -f environment.yml
 ```
 
-Activate environment:
+Activate environment (each new terminal session):
 
 ```bash
 conda activate pong-classroom
