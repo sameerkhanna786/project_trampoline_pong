@@ -1,0 +1,7 @@
+name: pong-classroom
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pygame
+  - setuptools<81
