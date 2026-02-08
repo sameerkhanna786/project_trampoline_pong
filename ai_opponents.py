@@ -158,17 +158,18 @@ class StudentAI(PongAI):
     name = "StudentAI"
 
     def choose_move(self, state: GameState) -> int:
-        # Student handholding template:
-        # Keep this method as a set of "state branches" and tune one branch at a time.
         paddle_center = state.my_paddle_y + state.paddle_height // 2
         screen_center = state.window_height // 2
 
         # Branch A: wall safety branch.
         # If your paddle is pinned against a wall, move away from that wall first.
+
         if state.my_paddle_y <= 0:
-            return MOVE_DOWN
+            # TODO: Your paddle is bumping into the top wall; what should you do?
+            return MOVE_STAY
         if state.my_paddle_y + state.paddle_height >= state.window_height:
-            return MOVE_UP
+            # TODO: Your paddle is bumping into the bottom wall; what should you do?
+            return MOVE_STAY
 
         # Branch B: ball is moving toward you.
         # Usually this is the most important branch for defense.
@@ -190,16 +191,20 @@ class StudentAI(PongAI):
 
             # Movement decision for the "ball coming at me" branch.
             if target_y < paddle_center - dead_zone:
+                # TODO: Your paddle is too low to catch the ball; what should you do?
                 return MOVE_UP
             if target_y > paddle_center + dead_zone:
+                # TODO: Your paddle is too high to catch the ball; what should you do?
                 return MOVE_DOWN
             return MOVE_STAY
 
         # Branch C: ball is moving away from you.
         # Reposition toward center so you are ready for the next rally.
         if paddle_center < screen_center - 12:
+            # TODO: Your paddle is higher than the center of your board; what should you do?
             return MOVE_DOWN
         if paddle_center > screen_center + 12:
+            # TODO: Your paddle is lower than the center of your board; what should you do?
             return MOVE_UP
 
         # Branch D: neutral fallback.
