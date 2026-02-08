@@ -209,12 +209,59 @@ Required work:
 3. Test by playing against your AI.
 4. Run benchmark mode before pushing.
 
+### 6.1 Exactly where students should edit code
+
+Edit this function:
+- File: `ai_opponents.py`
+- Class: `StudentAI`
+- Method: `choose_move(self, state: GameState) -> int`
+
+```python
+class StudentAI(PongAI):
+    name = "StudentAI"
+
+    def choose_move(self, state: GameState) -> int:
+        # Your code changes go here.
+        ...
+```
+
+Do not edit for this assignment:
+- `ReferenceAI` logic
+- core game loop in `pong.py` (unless teacher tells you to)
+
 Return values expected from `StudentAI.choose_move(...)`:
 - `-1` move up
 - `0` stay
 - `1` move down
 
 Read `AI_GUIDE.md` for strategy milestones and tips.
+
+### 6.2 Student run loop (edit -> run -> improve)
+
+Use this loop every time you make a change:
+
+```bash
+# 1) Activate environment
+conda activate pong-classroom
+
+# 2) Save code and run a quick syntax check
+python -m py_compile ai_opponents.py
+
+# 3) Play against your AI
+python pong.py --mode human-vs-student
+
+# 4) Watch StudentAI vs ReferenceAI
+python pong.py --mode ai-vs-ai --left-ai reference --right-ai student
+
+# 5) Run grading benchmark
+python pong.py --mode benchmark
+```
+
+Hints:
+- Save `ai_opponents.py` before running commands.
+- If the game is already open, close the window before rerunning.
+- If `pygame` import fails, activate env again: `conda activate pong-classroom`.
+- Start simple: track ball center first, then add prediction and a dead zone.
 
 ## 7. Benchmark and Pass Rule
 
@@ -261,7 +308,10 @@ Examples:
 ### 8.3 Make changes and test
 
 ```bash
+# edit ai_opponents.py (StudentAI.choose_move)
+python -m py_compile ai_opponents.py
 python pong.py --mode human-vs-student
+python pong.py --mode ai-vs-ai --left-ai reference --right-ai student
 python pong.py --mode benchmark
 ```
 
