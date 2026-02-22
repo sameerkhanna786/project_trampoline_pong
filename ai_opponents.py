@@ -80,16 +80,20 @@ def student_ai_choose_move(state):
     # Branch A: ball is moving toward you.
     # This is the most important branch — you need to defend!
     if is_ball_moving_toward_me(state):
-        # TODO: Move your paddle toward the ball to block it.
-        #   Hint: compare state.ball_y to paddle_center.
-        return MOVE_STAY
+        if state.ball_y < paddle_center:
+            return -1
+        elif state.ball_y > paddle_center:
+            return 1
+        else:
+            return 0
 
     # Branch B: ball is moving away from you.
-    # Good time to reposition so you are ready for the next rally.
-    # TODO: Move your paddle back toward the center of the screen.
-    #   Hint: compare paddle_center to screen_center.
-    return MOVE_STAY
-
+    # Good time to reposition so you are ready for the next rally
+    if paddle_center < screen_center:
+        return -1
+    elif paddle_center > screen_center:
+        return 1
+    return 0
 
 # ===== DO NOT EDIT BELOW THIS LINE ==========================================
 
