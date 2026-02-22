@@ -70,10 +70,29 @@ def predict_intercept_y(state):
 
 def student_ai_choose_move(state):
     """Starter strategy for students.
-
-    Edit this function to implement your own AI.
+    
     Return -1 (up), 0 (stay), or 1 (down).
     """
+
+    paddle_center = state.my_paddle_y + state.paddle_height // 2
+    screen_center = state.window_height // 2
+
+    if is_ball_moving_toward_me(state):
+
+        if state.ball_y < paddle_center:
+            return -1
+        elif state.ball_y > paddle_center:
+            return 1
+        else:
+            return 0
+
+    else:
+        if paddle_center < screen_center:
+            return 1
+        elif paddle_center > screen_center:
+            return -1
+        else:
+            return 0
     paddle_center = state.my_paddle_y + state.paddle_height // 2
     screen_center = state.window_height // 2
 
