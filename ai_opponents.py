@@ -77,54 +77,17 @@ def student_ai_choose_move(state):
     paddle_center = state.my_paddle_y + state.paddle_height // 2
     screen_center = state.window_height // 2
 
-    # Branch A: wall safety branch.
-    # If your paddle is pinned against a wall, move away from that wall first.
-
-    if state.my_paddle_y <= 0:
-        # TODO: Your paddle is bumping into the top wall; what should you do?
-        return MOVE_STAY
-    if state.my_paddle_y + state.paddle_height >= state.window_height:
-        # TODO: Your paddle is bumping into the bottom wall; what should you do?
-        return MOVE_STAY
-
-    # Branch B: ball is moving toward you.
-    # Usually this is the most important branch for defense.
+    # Branch A: ball is moving toward you.
+    # This is the most important branch — you need to defend!
     if is_ball_moving_toward_me(state):
-        # If ball is close, use current ball_y for a quick reaction.
-        horizontal_distance = abs(state.my_paddle_x - state.ball_x)
-        if horizontal_distance < 120:
-            target_y = state.ball_y
-        else:
-            # If ball is far, use predicted intercept.
-            # Try changing this to state.ball_y if prediction feels too hard.
-            target_y = predict_intercept_y(state)
-
-        # Smaller dead zone when ball is fast -> react more aggressively.
-        if abs(state.ball_vy) >= 6:
-            dead_zone = 8
-        else:
-            dead_zone = 14
-
-        # Movement decision for the "ball coming at me" branch.
-        if target_y < paddle_center - dead_zone:
-            # TODO: Your paddle is too low to catch the ball; what should you do?
-            return MOVE_UP
-        if target_y > paddle_center + dead_zone:
-            # TODO: Your paddle is too high to catch the ball; what should you do?
-            return MOVE_DOWN
+        # TODO: Move your paddle toward the ball to block it.
+        #   Hint: compare state.ball_y to paddle_center.
         return MOVE_STAY
 
-    # Branch C: ball is moving away from you.
-    # Reposition toward center so you are ready for the next rally.
-    if paddle_center < screen_center - 12:
-        # TODO: Your paddle is higher than the center of your board; what should you do?
-        return MOVE_DOWN
-    if paddle_center > screen_center + 12:
-        # TODO: Your paddle is lower than the center of your board; what should you do?
-        return MOVE_UP
-
-    # Branch D: neutral fallback.
-    # If no branch strongly suggests moving, hold still.
+    # Branch B: ball is moving away from you.
+    # Good time to reposition so you are ready for the next rally.
+    # TODO: Move your paddle back toward the center of the screen.
+    #   Hint: compare paddle_center to screen_center.
     return MOVE_STAY
 
 
