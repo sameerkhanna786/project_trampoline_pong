@@ -67,11 +67,15 @@ def predict_intercept_y(state):
 
 
 # ===== YOUR CODE: Edit the function below ===================================
-
 def student_ai_choose_move(state):
-    if state.ball_y < state.my_paddle_y:
+    paddle_center = state.my_paddle_y + state.paddle_height // 2
+
+    if state.ball_y < paddle_center:
         return -1
-    return 1
+    elif state.ball_y > paddle_center:
+        return 1
+    else:
+        return 0
 
 
 # ===== DO NOT EDIT BELOW THIS LINE ==========================================
