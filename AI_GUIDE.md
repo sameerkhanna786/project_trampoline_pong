@@ -1,13 +1,13 @@
 # AI Development Guide for Students
 
-This guide explains how to implement `StudentAI` clearly and safely while preserving game behavior.
+This guide explains how to implement `student_ai_choose_move()` clearly and safely while preserving game behavior.
 
 Read setup and Git basics first in `README.md`.
 
 ## 1. What you are allowed to change
 
 You should edit:
-- `StudentAI.choose_move(...)` in `ai_opponents.py`
+- `student_ai_choose_move(state)` in `ai_opponents.py`
 
 You should not edit (unless teacher explicitly asks):
 - Physics and collision logic in `pong.py`
@@ -16,7 +16,7 @@ You should not edit (unless teacher explicitly asks):
 
 ## 2. AI API Contract
 
-`StudentAI.choose_move(state)` is called every frame.
+`student_ai_choose_move(state)` is called every frame.
 
 Input:
 - `state`: a `GameState` object.
@@ -70,7 +70,7 @@ Implement in this order:
 Use a structure like:
 
 ```python
-def choose_move(self, state):
+def student_ai_choose_move(state):
     paddle_center = state.my_paddle_y + state.paddle_height // 2
 
     # Pick a target_y using your strategy
@@ -110,7 +110,7 @@ python pong.py --mode benchmark --matches 30 --seed 3000
 
 By default, benchmark pass requires:
 - at least 60% decisive-match win rate against `ReferenceAI`
-- no runtime errors in `StudentAI`
+- no runtime errors in `student_ai_choose_move`
 
 Note:
 - Draw-only matches do not count in the win-rate denominator.
@@ -126,7 +126,7 @@ If your AI behaves strangely:
 
 If benchmark crashes:
 - check for division-by-zero and index errors in your code
-- make sure all branches in `choose_move` return an integer
+- make sure all branches in `student_ai_choose_move` return an integer
 
 ## 9. Team Collaboration Suggestions
 
@@ -143,7 +143,7 @@ Example branch ideas:
 ## 10. PR Checklist for AI Work
 
 Before opening PR:
-- `StudentAI` is the only code logic changed (unless assigned otherwise)
+- `student_ai_choose_move` is the only code logic changed (unless assigned otherwise)
 - game runs in `human-vs-student` mode
 - benchmark command completes
 - PR includes:

@@ -312,14 +312,14 @@ def create_match_objects() -> tuple[pygame.Rect, pygame.Rect, pygame.Rect, int, 
     return left_paddle, right_paddle, ball_rect, vx, vy
 
 
-def run_single_ai_match(left_ai_name: str, right_ai_name: str, max_frames: int) -> tuple[str, int, int, str]:
+def run_single_ai_match(left_ai_key: str, right_ai_key: str, max_frames: int) -> tuple[str, int, int, str]:
     """Run one headless AI-vs-AI match and return winner and score.
 
     winner: "left", "right", or "draw"
     reason: "score", "frame_limit", "left_ai_error", "right_ai_error"
     """
-    left_ai = create_ai(left_ai_name)
-    right_ai = create_ai(right_ai_name)
+    left_ai_fn, _ = create_ai(left_ai_key)
+    right_ai_fn, _ = create_ai(right_ai_key)
     left_paddle, right_paddle, ball_rect, vx, vy = create_match_objects()
 
     left_score = 0
@@ -331,12 +331,12 @@ def run_single_ai_match(left_ai_name: str, right_ai_name: str, max_frames: int) 
         right_state = build_ai_state("right", right_paddle, left_paddle, ball_rect, vx, vy)
 
         try:
-            left_move = normalize_move(left_ai.choose_move(left_state))
+            left_move = normalize_move(left_ai_fn(left_state))
         except Exception:
             return "right", left_score, right_score, "left_ai_error"
 
         try:
-            right_move = normalize_move(right_ai.choose_move(right_state))
+            right_move = normalize_move(right_ai_fn(right_state))
         except Exception:
             return "left", left_score, right_score, "right_ai_error"
 
@@ -439,22 +439,24 @@ def run_interactive_mode(args: argparse.Namespace) -> None:
     right_score = 0
     running = True
 
-    left_ai = None
-    right_ai = None
+    left_ai_fn = None
+    right_ai_fn = None
+    left_ai_name = ""
+    right_ai_name = ""
     status_text = "Mode: PVP"
 
     if args.mode == "pvp":
         status_text = "Mode: PVP (2 players)"
     elif args.mode == "human-vs-ai":
-        right_ai = create_ai(args.opponent)
-        status_text = f"Mode: Human vs {right_ai.name}"
+        right_ai_fn, right_ai_name = create_ai(args.opponent)
+        status_text = f"Mode: Human vs {right_ai_name}"
     elif args.mode == "human-vs-student":
-        right_ai = create_ai("student")
+        right_ai_fn, right_ai_name = create_ai("student")
         status_text = "Mode: Human vs StudentAI"
     elif args.mode == "ai-vs-ai":
-        left_ai = create_ai(args.left_ai)
-        right_ai = create_ai(args.right_ai)
-        status_text = f"Mode: {left_ai.name} vs {right_ai.name}"
+        left_ai_fn, left_ai_name = create_ai(args.left_ai)
+        right_ai_fn, right_ai_name = create_ai(args.right_ai)
+        status_text = f"Mode: {left_ai_name} vs {right_ai_name}"
 
     show_message(screen, font, "Pong - First to 7")
 
@@ -471,13 +473,13 @@ def run_interactive_mode(args: argparse.Namespace) -> None:
         elif args.mode in {"human-vs-ai", "human-vs-student"}:
             move_left_paddle(keys, left_paddle)
             right_state = build_ai_state("right", right_paddle, left_paddle, ball_rect, vx, vy)
-            right_move = normalize_move(right_ai.choose_move(right_state))
+            right_move = normalize_move(right_ai_fn(right_state))
             move_right_paddle_with_ai(right_paddle, right_move)
         elif args.mode == "ai-vs-ai":
             left_state = build_ai_state("left", left_paddle, right_paddle, ball_rect, vx, vy)
             right_state = build_ai_state("right", right_paddle, left_paddle, ball_rect, vx, vy)
-            left_move = normalize_move(left_ai.choose_move(left_state))
-            right_move = normalize_move(right_ai.choose_move(right_state))
+            left_move = normalize_move(left_ai_fn(left_state))
+            right_move = normalize_move(right_ai_fn(right_state))
             move_left_paddle_with_ai(left_paddle, left_move)
             move_right_paddle_with_ai(right_paddle, right_move)
 
@@ -500,9 +502,9 @@ def run_interactive_mode(args: argparse.Namespace) -> None:
             if args.mode == "pvp":
                 winner = "Left Player Wins!" if left_score > right_score else "Right Player Wins!"
             elif args.mode in {"human-vs-ai", "human-vs-student"}:
-                winner = "You Win!" if left_score > right_score else f"{right_ai.name} Wins!"
+                winner = "You Win!" if left_score > right_score else f"{right_ai_name} Wins!"
             else:
-                winner = f"{left_ai.name} Wins!" if left_score > right_score else f"{right_ai.name} Wins!"
+                winner = f"{left_ai_name} Wins!" if left_score > right_score else f"{right_ai_name} Wins!"
             show_message(screen, font, winner)
             left_score = 0
             right_score = 0

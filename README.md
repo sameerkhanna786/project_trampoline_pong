@@ -19,7 +19,7 @@ Students should:
 ## 2. Repository Structure
 
 - `pong.py`: game loop, modes, rendering, benchmark runner.
-- `ai_opponents.py`: AI classes (`StudentAI`, `ReferenceAI`, etc.).
+- `ai_opponents.py`: AI functions (`student_ai_choose_move`, `ReferenceAI`, etc.).
 - `AI_GUIDE.md`: strategy and AI development guide.
 - `environment.yml`: pinned conda environment for consistent setup.
 - `.github/CODEOWNERS`: code-owner assignment for protected branch reviews.
@@ -204,7 +204,7 @@ python pong.py --mode benchmark
 ## 6. AI Assignment Requirements
 
 Required work:
-1. Edit `StudentAI.choose_move(...)` in `ai_opponents.py`.
+1. Edit `student_ai_choose_move(state)` in `ai_opponents.py`.
 2. Keep core game logic unchanged unless instructed by the teacher.
 3. Test by playing against your AI.
 4. Run benchmark mode before pushing.
@@ -213,23 +213,19 @@ Required work:
 
 Edit this function:
 - File: `ai_opponents.py`
-- Class: `StudentAI`
-- Method: `choose_move(self, state: GameState) -> int`
+- Function: `student_ai_choose_move(state)`
 
 ```python
-class StudentAI(PongAI):
-    name = "StudentAI"
-
-    def choose_move(self, state: GameState) -> int:
-        # Your code changes go here.
-        ...
+def student_ai_choose_move(state):
+    # Your code changes go here.
+    ...
 ```
 
 Do not edit for this assignment:
 - `ReferenceAI` logic
 - core game loop in `pong.py` (unless teacher tells you to)
 
-Return values expected from `StudentAI.choose_move(...)`:
+Return values expected from `student_ai_choose_move(state)`:
 - `-1` move up
 - `0` stay
 - `1` move down
@@ -308,7 +304,7 @@ Examples:
 ### 8.3 Make changes and test
 
 ```bash
-# edit ai_opponents.py (StudentAI.choose_move)
+# edit ai_opponents.py (student_ai_choose_move)
 python -m py_compile ai_opponents.py
 python pong.py --mode human-vs-student
 python pong.py --mode ai-vs-ai --left-ai reference --right-ai student
@@ -497,7 +493,7 @@ git push
 
 ### Benchmark always fails
 
-- Check that `StudentAI.choose_move(...)` returns only `-1`, `0`, or `1`.
+- Check that `student_ai_choose_move(state)` returns only `-1`, `0`, or `1`.
 - Add debug prints carefully, then remove before commit.
 - Test with:
 
