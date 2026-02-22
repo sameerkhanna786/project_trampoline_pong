@@ -68,29 +68,31 @@ def predict_intercept_y(state):
 
 # ===== YOUR CODE: Edit the function below ===================================
 
-def student_ai_choose_move(state):
-    """Starter strategy for students.
 
-    Edit this function to implement your own AI.
-    Return -1 (up), 0 (stay), or 1 (down).
-    """
+
+def student_ai_choose_move(state):
     paddle_center = state.my_paddle_y + state.paddle_height // 2
     screen_center = state.window_height // 2
+    dead_zone = 5  # prevents jitter
 
-    # Branch A: ball is moving toward you.
-    # This is the most important branch — you need to defend!
+    # If ball is coming toward us → defend
     if is_ball_moving_toward_me(state):
-        # TODO: Move your paddle toward the ball to block it.
-        #   Hint: compare state.ball_y to paddle_center.
-        return MOVE_STAY
 
-    # Branch B: ball is moving away from you.
-    # Good time to reposition so you are ready for the next rally.
-    # TODO: Move your paddle back toward the center of the screen.
-    #   Hint: compare paddle_center to screen_center.
-    return MOVE_STAY
+        if state.ball_y < paddle_center - dead_zone:
+            return MOVE_UP
+        elif state.ball_y > paddle_center + dead_zone:
+            return MOVE_DOWN
+        else:
+            return MOVE_STAY
 
-
+    # If ball is moving away → reset to center
+    else:
+        if paddle_center < screen_center - dead_zone:
+            return MOVE_DOWN
+        elif paddle_center > screen_center + dead_zone:
+            return MOVE_UP
+        else:
+            return MOVE_STAY
 # ===== DO NOT EDIT BELOW THIS LINE ==========================================
 
 def tracking_ai_choose_move(state):
