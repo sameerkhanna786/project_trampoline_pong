@@ -45,44 +45,49 @@ Helpful interpretation:
 
 ## 4. Recommended Milestone Plan
 
-Implement in this order:
+The template in `ai_opponents.py` has two branches with TODO hints.
+Work through them in order:
 
-1. Ball Tracker:
-- move toward `ball_y`.
+1. Fill in Branch A (ball moving toward you):
+- Compare `state.ball_y` to `paddle_center`.
+- Return `MOVE_UP` (`-1`) or `MOVE_DOWN` (`1`) to move your paddle toward the ball.
+- This alone is enough to start blocking shots.
 
-2. Direction-Aware Tracker:
-- only chase when ball moves toward your side.
-- move to center when ball moves away.
+2. Fill in Branch B (ball moving away):
+- Compare `paddle_center` to `screen_center`.
+- Move your paddle back toward the center so you are ready for the next rally.
 
-3. Intercept Prediction:
-- estimate where the ball will reach your paddle x-position.
-- move toward predicted intercept, not current ball y.
-
-4. Stability:
-- add dead zone around paddle center to reduce jitter.
-
-5. Performance Tuning:
-- adjust dead zone and fallback behavior.
-- compare against `ReferenceAI` using benchmark mode.
+3. Optional enhancements (after passing benchmark):
+- Add a dead zone so the paddle does not jitter when it is already close to the target.
+- Use `predict_intercept_y(state)` (provided helper) to aim where the ball will arrive instead of where it is now.
+- Tune numeric values (dead zone size, switching thresholds) by watching replays.
 
 ## 5. Simple Implementation Pattern
 
-Use a structure like:
+Here is a minimal working version that fills in both TODOs:
 
 ```python
 def student_ai_choose_move(state):
     paddle_center = state.my_paddle_y + state.paddle_height // 2
+    screen_center = state.window_height // 2
 
-    # Pick a target_y using your strategy
-    target_y = state.ball_y
+    if is_ball_moving_toward_me(state):
+        # Branch A: move toward the ball
+        if state.ball_y < paddle_center:
+            return -1   # up
+        if state.ball_y > paddle_center:
+            return 1    # down
+        return 0
 
-    dead_zone = 8
-    if target_y < paddle_center - dead_zone:
-        return -1
-    if target_y > paddle_center + dead_zone:
-        return 1
+    # Branch B: drift back to center
+    if paddle_center < screen_center:
+        return 1    # down toward center
+    if paddle_center > screen_center:
+        return -1   # up toward center
     return 0
 ```
+
+This is enough to beat `ReferenceAI` and pass the benchmark.
 
 ## 6. Required Test Workflow
 

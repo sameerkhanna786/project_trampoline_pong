@@ -257,7 +257,7 @@ Hints:
 - Save `ai_opponents.py` before running commands.
 - If the game is already open, close the window before rerunning.
 - If `pygame` import fails, activate env again: `conda activate pong-classroom`.
-- Start simple: track ball center first, then add prediction and a dead zone.
+- The template has two TODO hints — fill in Branch A (defend when the ball comes toward you) first, then Branch B (return to center).
 
 ## 7. Benchmark and Pass Rule
 
