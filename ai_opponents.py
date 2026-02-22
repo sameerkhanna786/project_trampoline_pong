@@ -165,29 +165,18 @@ class StudentAI(PongAI):
         # If your paddle is pinned against a wall, move away from that wall first.
 
         if state.my_paddle_y <= 0:
-            # TODO: Your paddle is bumping into the top wall; what should you do?
-            return MOVE_STAY
+            return MOVE_DOWN
         if state.my_paddle_y + state.paddle_height >= state.window_height:
-            # TODO: Your paddle is bumping into the bottom wall; what should you do?
-            return MOVE_STAY
+            return MOVE_UP
 
         # Branch B: ball is moving toward you.
         # Usually this is the most important branch for defense.
         if _is_ball_moving_toward_me(state):
-            # If ball is close, use current ball_y for a quick reaction.
-            horizontal_distance = abs(state.my_paddle_x - state.ball_x)
-            if horizontal_distance < 120:
-                target_y = state.ball_y
-            else:
-                # If ball is far, use predicted intercept.
-                # Try changing this to state.ball_y if prediction feels too hard.
-                target_y = _predict_intercept_y(state)
+            target_y = _predict_intercept_y(state)
 
             # Smaller dead zone when ball is fast -> react more aggressively.
-            if abs(state.ball_vy) >= 6:
-                dead_zone = 8
-            else:
-                dead_zone = 14
+          
+            dead_zone = 6
 
             # Movement decision for the "ball coming at me" branch.
             if target_y < paddle_center - dead_zone:
