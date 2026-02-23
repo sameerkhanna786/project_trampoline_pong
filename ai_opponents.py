@@ -82,13 +82,21 @@ def student_ai_choose_move(state):
     if is_ball_moving_toward_me(state):
         # TODO: Move your paddle toward the ball to block it.
         #   Hint: compare state.ball_y to paddle_center.
-        return MOVE_STAY
+        if state.ball_y < paddle_center:
+            return -1 #up
+        if state.ball_y > paddle_center:
+            return 1
+        return 0
 
     # Branch B: ball is moving away from you.
     # Good time to reposition so you are ready for the next rally.
     # TODO: Move your paddle back toward the center of the screen.
     #   Hint: compare paddle_center to screen_center.
-    return MOVE_STAY
+    if state.ball_y < paddle_center:
+        return 1
+    if state.ball_y > paddle_center:
+        return -1
+    return 0
 
 
 # ===== DO NOT EDIT BELOW THIS LINE ==========================================
